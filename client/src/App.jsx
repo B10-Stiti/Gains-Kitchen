@@ -1,10 +1,13 @@
+import React from "react";
+
+import AuthForm from "./components/AuthForm"
 
 function App() {
 
   return (
-
-    <h1 className='bg-amber-400'> Hello world</h1>
-
+    <>
+    <AuthForm/>
+    </>
   )
 }
 
