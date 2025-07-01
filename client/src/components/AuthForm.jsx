@@ -1,13 +1,68 @@
 import React, { useState } from "react";
 const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const [form, setForm] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirm_password: "",
+  });
+
+  const validateForm = (form, isLogin) => {
+    if (!form.email || !form.password) {
+      return "Email and password are required";
+    }
+    if (!isLogin) {
+      if (!form.username || !form.confirm_password) {
+        return "All fields are required";
+      }
+      if (form.password !== form.confirm_password) {
+        return "Passwords do not match";
+      }
+    }
+    return null;
+  };
+  const toggleForm = () => {
+    setIsLogin(!isLogin);
+    setForm({
+      username: "",
+      email: "",
+      password: "",
+      confirm_password: "",
+    });
+  };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const error = validateForm(form, isLogin);
+    if (error) {
+      alert(error);
+      return;
+    }
+    const url = isLogin ? "/api/auth/login" : "/api/auth/register";
+    const res = await fetch(url, {
+      // this works without base_url, because we use proxy in vite config
+      method: "Post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(form),
+    });
+    if (!res.ok) {
+      console.error("Error:", res.status, res.statusText);
+      return;
+    }
+  };
+
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg">
         <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
           {isLogin ? "Login" : "Register"}
         </h2>
-        <form className="space-y-4">
+        <form className="space-y-4" onSubmit={handleSubmit}>
           {!isLogin && (
             <div>
               <label className="block text-sm font-medium text-gray-700">
@@ -16,6 +71,8 @@ const AuthForm = () => {
               <input
                 type="text"
                 name="username"
+                onChange={handleChange}
+                value={form.username}
                 className="w-full px-4 py-2 mt-1 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
             </div>
@@ -28,6 +85,8 @@ const AuthForm = () => {
             <input
               type="email"
               name="email"
+              onChange={handleChange}
+              value={form.email}
               className="w-full px-4 py-2 mt-1 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
@@ -38,6 +97,8 @@ const AuthForm = () => {
             <input
               type="password"
               name="password"
+              onChange={handleChange}
+              value={form.password}
               className="w-full px-4 py-2 mt-1 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
@@ -48,7 +109,9 @@ const AuthForm = () => {
               </label>
               <input
                 type="password"
-                name="confirm-password"
+                name="confirm_password"
+                onChange={handleChange}
+                value={form.confirm_password}
                 className="w-full px-4 py-2 mt-1 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
               />
             </div>
@@ -63,7 +126,7 @@ const AuthForm = () => {
           {isLogin ? "Don't have an account? " : "Already have an account? "}
           <button
             type="button"
-            onClick={() => setIsLogin(!isLogin)}
+            onClick={toggleForm}
             className="text-blue-500 hover:underline font-medium"
           >
             {isLogin ? "Register" : "login"}
