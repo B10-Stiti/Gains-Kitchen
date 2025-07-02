@@ -46,10 +46,12 @@ const AuthForm = () => {
     const url = isLogin ? "/api/auth/login" : "/api/auth/register";
     const res = await fetch(url, {
       // this works without base_url, because we use proxy in vite config
-      method: "Post",
+      method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
     });
+    const data = await res.json();
+    console.log(data)
     if (!res.ok) {
       console.error("Error:", res.status, res.statusText);
       return;
