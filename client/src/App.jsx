@@ -1,12 +1,12 @@
 import React from "react";
 
-import AuthForm from "./components/AuthForm"
+import ShareRecipe from "./components/ShareRecipe"
 
 function App() {
 
   return (
     <>
-    <AuthForm/>
+    <ShareRecipe/>
     </>
   )
 }
