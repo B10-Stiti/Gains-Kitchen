@@ -1,5 +1,13 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 const AuthForm = () => {
+  //delete this later
+  const navigate = useNavigate();
+  const handleLoginSuccess = () => {
+    navigate("/share-recipe");
+  };
+// ends here, and also the button down 
   const [isLogin, setIsLogin] = useState(true);
   const [form, setForm] = useState({
     username: "",
@@ -56,6 +64,7 @@ const AuthForm = () => {
       console.error("Error:", res.status, res.statusText);
       return;
     }
+    localStorage.setItem("user", JSON.stringify(data.data.user)); // save user info in the browser
   };
 
   return (
@@ -124,6 +133,7 @@ const AuthForm = () => {
             className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-xl cursor-pointer transition"
           />
         </form>
+        <button onClick={handleLoginSuccess}>Go to Share Recipe</button>
         <p className="text-sm mt-4 text-center text-gray-600">
           {isLogin ? "Don't have an account? " : "Already have an account? "}
           <button

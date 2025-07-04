@@ -52,13 +52,33 @@ const ShareRecipe = () => {
     "Dinner",
     "Pre-Workout",
     "Post-Workout",
-    "Dessert"
+    "Dessert",
   ];
-  const fitnessGoals = ["Bulking", "Cutting", "Maintenance","Muscle Gain"];
+  const fitnessGoals = ["Bulking", "Cutting", "Maintenance", "Muscle Gain"];
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    // Frontend validation
+    if (
+      !title.trim() ||
+      !description.trim() ||
+      !imageUrl.trim() ||
+      ingredients.length === 0 ||
+      !recipeType.trim() ||
+      !fitnessGoal.trim() ||
+      !instructions.trim()
+    ) {
+      alert("Please fill in all fields before submitting.");
+      return;
+    }
+    const user = JSON.parse(localStorage.getItem("user"));
+    console.log(user)
+    if (!user) {
+      alert("Please log in to share a recipe.");
+      return;
+    }
     const recipeData = {
+      userId: user._id,
       title,
       description,
       imageUrl,
@@ -67,10 +87,21 @@ const ShareRecipe = () => {
       fitnessGoal,
       instructions,
     };
+    console.log(recipeData)
+    const url = "/api/recipes";
+    const res = await fetch(url, {
+      // this works without base_url, because we use proxy in vite config
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(recipeData),
+    });
+    const data = await res.json();
+    console.log(data);
+    if (!res.ok) {
+      console.error("Error:", res.status, res.statusText);
+      return;
+    }
 
-    console.log("Recipe submitted:", recipeData);
-
-    // Reset form
     setTitle("");
     setDescription("");
     setImageUrl("");
@@ -82,9 +113,11 @@ const ShareRecipe = () => {
   };
 
   return (
-    
     <div className="border border-gray-200 rounded-md p-6 bg-gray-100 shadow max-w-2xl mx-auto mt-6">
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4 text-gray-900">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col gap-4 text-gray-900"
+      >
         {/* Title */}
         <label className="font-semibold">Title</label>
         <input
@@ -104,6 +137,7 @@ const ShareRecipe = () => {
           id="image"
           name="image"
           accept="image/*"
+          required
           onChange={handleImageChange}
           className="mb-2"
         />
@@ -121,6 +155,7 @@ const ShareRecipe = () => {
           name="description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
+          required
           className="border border-gray-300 rounded px-3 py-2 h-20 resize-y focus:outline-none focus:ring-2 focus:ring-green-500"
           placeholder="Short description of the recipe"
         />
@@ -198,6 +233,7 @@ const ShareRecipe = () => {
         {/* Instructions */}
         <label className="font-semibold">Instructions</label>
         <textarea
+          required
           name="instructions"
           value={instructions}
           onChange={(e) => setInstructions(e.target.value)}
