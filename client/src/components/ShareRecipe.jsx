@@ -18,7 +18,7 @@ const ShareRecipe = () => {
     formData.append("image", file);
 
     try {
-      const res = await fetch("http://localhost:5000/api/upload", {
+      const res = await fetch("/api/upload", {
         method: "POST",
         body: formData,
       });
@@ -44,17 +44,9 @@ const ShareRecipe = () => {
   const handleRemoveIngredient = (name) => {
     setIngredients(ingredients.filter((i) => i !== name));
   };
-
-  const recipeTypes = [
-    "Breakfast",
-    "Lunch",
-    "Snack",
-    "Dinner",
-    "Pre-Workout",
-    "Post-Workout",
-    "Dessert",
-  ];
+  
   const fitnessGoals = ["Bulking", "Cutting", "Maintenance", "Muscle Gain"];
+  const recipeTypes = ["Breakfast", "Lunch", "Snack", "Dinner", "Pre-Workout", "Post-Workout", "Dessert"];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -72,7 +64,6 @@ const ShareRecipe = () => {
       return;
     }
     const user = JSON.parse(localStorage.getItem("user"));
-    console.log(user)
     if (!user) {
       alert("Please log in to share a recipe.");
       return;
@@ -87,7 +78,6 @@ const ShareRecipe = () => {
       fitnessGoal,
       instructions,
     };
-    console.log(recipeData)
     const url = "/api/recipes";
     const res = await fetch(url, {
       // this works without base_url, because we use proxy in vite config
@@ -95,8 +85,8 @@ const ShareRecipe = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(recipeData),
     });
-    const data = await res.json();
-    console.log(data);
+    const rep = await res.json();
+    console.log(rep);
     if (!res.ok) {
       console.error("Error:", res.status, res.statusText);
       return;
