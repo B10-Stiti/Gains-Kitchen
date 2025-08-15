@@ -23,7 +23,6 @@ export const getUser = async (req, res) => {
   }
 };
 
-
 export const updateUser = async (req, res) => {
   try {
     const { profilePicture, username, bio, fitnessGoal } = req.body;
@@ -48,5 +47,78 @@ export const updateUser = async (req, res) => {
       message: "Error while updating user",
       error: err.message,
     });
+  }
+};
+
+// Favorites
+export const getUserFavorites = async (req, res) => {
+  try {
+    // find user and populate the favorites array with actual Recipe documents
+    const user = await User.findById(req.params.id).populate("favorites");
+    if (!user) {
+      return res.status(404).json({ 
+        code : "API.user.failed",
+        message: "User not found" });
+    }
+    return res.status(200).json({
+      code: "API.user.success",
+      message: "Fav recipes found successfully",
+      data: user.favorites,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error while fetching user favorites" });
+  }
+};
+
+export const addFavoriteRecipe = async (req, res) => {
+  try {
+    const { id, recipeId } = req.params;
+
+    const recipe = await Recipe.findById(recipeId).lean();
+    if (!recipe) return res.status(404).json({ message: "Recipe not found" });
+
+    const user = await User.findById(id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    if (!user.favorites.includes(recipeId)) {
+      user.favorites.push(recipeId);
+      await user.save();
+    }
+
+    res.status(200).json({
+      code: "API.user.success",
+      message: "Fav recipe added successfully",
+      data: user.favorites,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error while adding favorite recipe" });
+  }
+};
+
+export const removeFavoriteRecipe = async (req, res) => {
+  try {
+    const { id, recipeId } = req.params;
+
+    const recipe = await Recipe.findById(recipeId).lean();
+    if (!recipe) return res.status(404).json({ message: "Recipe not found" });
+
+    const user = await User.findById(id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    user.favorites = user.favorites.filter(
+      (favId) => favId.toString() !== recipeId
+    );
+    await user.save();
+
+    res.status(200).json({
+      code: "API.user.success",
+      message: "Fav recipe deleted successfully",
+      data: user.favorites,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error while deleting favorite recipe" });
   }
 };

@@ -60,7 +60,7 @@ const Profile = () => {
   const { profilePicture, username, bio, fitnessGoal, favorites } = userData.user;
 
   return (
-    <div className="max-w-3xl mx-auto mt-8 p-6 bg-gray-100 rounded-lg shadow-md text-gray-900">
+    <div className="max-w-3xl mx-auto mt-8 p-6 bg-gray-300 rounded-lg shadow-md text-gray-900">
       <button
         type="button"
         onClick={() => setIsEditing(!isEditing)}
@@ -85,7 +85,7 @@ const Profile = () => {
             <img
               src={profilePicture || "/profil-default.jpg"}
               alt="Profile"
-              className="w-32 h-32 rounded-full object-cover shadow-md"
+              className="w-64 h-64 rounded-full object-cover shadow-md"
             />
           )}
         </div>
