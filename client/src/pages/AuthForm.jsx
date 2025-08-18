@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import {AuthContext} from "../AuthContext";
+import { AuthContext } from "../context/AuthContext";
 const AuthForm = () => {
   const { login } = useContext(AuthContext);
   const [isLogin, setIsLogin] = useState(true);

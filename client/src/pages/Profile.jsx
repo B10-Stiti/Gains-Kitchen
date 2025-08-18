@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
-import ProfileHeader from "./ProfileHeader";
-import ProfileEditForm from "./ProfileEditForm";
-import RecipeCard from "./RecipeCard";
-import { AuthContext } from "../AuthContext";
+import ProfileHeader from "../components/ProfileHeader";
+import ProfileEditForm from "../components/ProfileEditForm";
+import RecipeCard from "../components/RecipeCard";
+import { AuthContext } from "../context/AuthContext";
 
 const Profile = () => {
   const { userId } = useContext(AuthContext);

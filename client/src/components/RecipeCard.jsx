@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { AuthContext } from "../AuthContext";
+import { AuthContext } from "../context/AuthContext";
 
 const RecipeCard = ({
   recipe,
@@ -27,7 +27,6 @@ const RecipeCard = ({
       onToggleFavorite(recipe._id);
     }
     setIsFavorite(!isFavorite);
-
   };
 
   return (

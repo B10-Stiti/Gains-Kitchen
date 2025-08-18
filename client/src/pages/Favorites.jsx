@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
-import RecipeCard from "./RecipeCard";
-import {AuthContext} from "../AuthContext";
+import RecipeCard from "../components/RecipeCard";
+import { AuthContext } from "../context/AuthContext";
 const Favorites = () => {
   const [userFavorites, setUserFavorites] = useState([]);
   const { userId } = useContext(AuthContext);
