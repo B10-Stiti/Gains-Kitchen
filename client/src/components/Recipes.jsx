@@ -26,7 +26,7 @@ const Recipes = () => {
         <RecipeCard
           key={recipe._id}
           recipe={recipe}
-          isFavorite={userFavorites.includes(recipe._id)}
+          // isFavorite={userFavorites.includes(recipe._id)}
         />
       ))}
     </div>

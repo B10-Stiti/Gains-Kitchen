@@ -3,19 +3,19 @@ import User from "../models/User.js";
 
 export const getUser = async (req, res) => {
   try {
-    const [user, recipeCount] = await Promise.all([
-      User.findById(req.params.id).lean(),
-      Recipe.countDocuments({ userId: req.params.id }),
+    const userId = req.params.id
+    const [user, recipeCount,userRecipes] = await Promise.all([
+      User.findById(userId).lean(),
+      Recipe.countDocuments({ userId: userId }),
+      Recipe.find({ userId: userId }).sort({ createdAt: -1 }).lean(),
     ]);
-
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-
     return res.status(200).json({
       code: "API.user.success",
       message: "User found successfully",
-      data: { user, recipeCount },
+      data: { user, recipeCount, userRecipes},
     });
   } catch (err) {
     console.error(err);
