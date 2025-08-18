@@ -28,7 +28,7 @@ export const registerUser = async (req, res) => {
         code: "API.signup.success",
         message: "user added successfully",
         data: {
-          user: user,
+          userId: user._id,
         },
       });
     } else {
@@ -55,7 +55,7 @@ export const loginUser = async (req, res) => {
         code: "API.login.success",
         message: "user logged successFully",
         data: {
-          user: check_user,
+          userId: check_user._id,
         },
       });
     } else {

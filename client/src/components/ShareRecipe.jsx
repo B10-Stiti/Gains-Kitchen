@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { AuthContext } from "../AuthContext";
 
 const ShareRecipe = () => {
+  const { userId } = useContext(AuthContext);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [imageUrl, setImageUrl] = useState("");
@@ -25,8 +27,8 @@ const ShareRecipe = () => {
 
       if (!res.ok) throw new Error("Upload failed");
 
-      const data = await res.json();
-      setImageUrl(data.imageUrl);
+      const rep = await res.json();
+      setImageUrl(rep.imageUrl);
     } catch (error) {
       console.error("Error uploading image:", error);
     }
@@ -44,9 +46,17 @@ const ShareRecipe = () => {
   const handleRemoveIngredient = (name) => {
     setIngredients(ingredients.filter((i) => i !== name));
   };
-  
+
   const fitnessGoals = ["Bulking", "Cutting", "Maintenance", "Muscle Gain"];
-  const recipeTypes = ["Breakfast", "Lunch", "Snack", "Dinner", "Pre-Workout", "Post-Workout", "Dessert"];
+  const recipeTypes = [
+    "Breakfast",
+    "Lunch",
+    "Snack",
+    "Dinner",
+    "Pre-Workout",
+    "Post-Workout",
+    "Dessert",
+  ];
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -63,13 +73,12 @@ const ShareRecipe = () => {
       alert("Please fill in all fields before submitting.");
       return;
     }
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (!user) {
+    if (!userId) {
       alert("Please log in to share a recipe.");
       return;
     }
     const recipeData = {
-      userId: user._id,
+      userId: userId,
       title,
       description,
       imageUrl,

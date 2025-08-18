@@ -1,17 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { AuthContext } from "../AuthContext";
 
 const RecipeCard = ({
   recipe,
   isFavorite: initialFavorite = false,
   onToggleFavorite,
 }) => {
+  const { userId } = useContext(AuthContext);
   const [showFull, setShowFull] = useState(false);
   const [isFavorite, setIsFavorite] = useState(initialFavorite);
 
   const handleFavorite = async () => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    console.log(user);
-    const url = "/api/user/" + user._id + "/favorites/" + recipe._id;
+    console.log(userId);
+    const url = "/api/user/" + userId + "/favorites/" + recipe._id;
     const res = await fetch(url, {
       method: isFavorite ? "DELETE" : "POST",
       headers: { "Content-Type": "application/json" },

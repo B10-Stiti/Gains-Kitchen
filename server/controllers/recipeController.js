@@ -39,12 +39,13 @@ export const createRecipe = async (req, res) => {
       return res.status(201).json({
         code: "API.Recipes.success",
         message: "Recipe added successfully",
-        data: {
-          recipe: recipe,
-        },
+        data: recipe,
       });
     } else {
-      return res.status(400).json({ message: "Failed to add Recipe" });
+      return res.status(400).json({
+        code: "API.Recipes.failed",
+        message: "Failed to add Recipe",
+      });
     }
   } catch (error) {
     console.error(error);
@@ -77,4 +78,3 @@ export const getRecipes = async (req, res) => {
     });
   }
 };
-

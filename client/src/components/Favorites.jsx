@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import RecipeCard from "./RecipeCard";
-
+import {AuthContext} from "../AuthContext";
 const Favorites = () => {
   const [userFavorites, setUserFavorites] = useState([]);
+  const { userId } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchFavRecipes = async () => {
-      const user = JSON.parse(localStorage.getItem("user"));
-      console.log(user);
-      const url = "/api/user/" + user._id + "/favorites";
+      if (!userId) return;
+      const url = "/api/user/" + userId + "/favorites";
       const res = await fetch(url, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
@@ -22,7 +22,7 @@ const Favorites = () => {
       setUserFavorites(rep.data);
     };
     fetchFavRecipes();
-  }, []);
+  }, [userId]);
 
   if (userFavorites.length === 0) {
     return (

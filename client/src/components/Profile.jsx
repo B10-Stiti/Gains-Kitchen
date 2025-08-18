@@ -1,12 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import ProfileHeader from "./ProfileHeader";
 import ProfileEditForm from "./ProfileEditForm";
 import RecipeCard from "./RecipeCard";
+import { AuthContext } from "../AuthContext";
 
 const Profile = () => {
+  const { userId } = useContext(AuthContext);
   const [isEditing, setIsEditing] = useState(false);
   const [userData, setUserData] = useState({
-    user: { profilePicture: "", username: "", bio: "", fitnessGoal: "", favorites: [] },
+    user: {
+      profilePicture: "",
+      username: "",
+      bio: "",
+      fitnessGoal: "",
+      favorites: [],
+    },
     recipeCount: 0,
     userRecipes: [],
   });
@@ -26,10 +34,10 @@ const Profile = () => {
 
       if (!res.ok) throw new Error("Upload failed");
 
-      const data = await res.json();
+      const rep = await res.json();
       setUserData({
         ...userData,
-        user: { ...userData.user, profilePicture: data.imageUrl },
+        user: { ...userData.user, profilePicture: rep.imageUrl },
       });
     } catch (error) {
       console.error("Error uploading image:", error);
@@ -38,8 +46,7 @@ const Profile = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const user = JSON.parse(localStorage.getItem("user"));
-      const url = "/api/user/" + user._id;
+      const url = "/api/user/" + userId;
       const res = await fetch(url, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
@@ -55,7 +62,7 @@ const Profile = () => {
     fetchData();
   }, []);
 
-   return (
+  return (
     <div className="max-w-7xl mx-auto mt-8 px-4">
       {isEditing ? (
         <ProfileEditForm
@@ -70,7 +77,9 @@ const Profile = () => {
 
       {/* My Recipes Section */}
       <div className="mt-8">
-        <h2 className="text-2xl font-bold mb-4 border-b-2 border-green-500 pb-2">My Recipes</h2>
+        <h2 className="text-2xl font-bold mb-4 border-b-2 border-green-500 pb-2">
+          My Recipes
+        </h2>
         {userData.userRecipes.length === 0 ? (
           <p className="text-gray-500">No recipes shared yet.</p>
         ) : (
