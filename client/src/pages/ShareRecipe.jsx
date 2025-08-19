@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import Header from "../components/Header";
 
 const ShareRecipe = () => {
   const { userId } = useContext(AuthContext);
@@ -112,6 +113,8 @@ const ShareRecipe = () => {
   };
 
   return (
+    <>
+    <Header showSearch={false} />
     <div className="border border-gray-200 rounded-md p-6 bg-gray-100 shadow max-w-2xl mx-auto mt-6">
       <form
         onSubmit={handleSubmit}
@@ -249,6 +252,7 @@ const ShareRecipe = () => {
         </button>
       </form>
     </div>
+    </>
   );
 };
 

@@ -1,5 +1,7 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
+import Header from "../components/Header";
+
 const AuthForm = () => {
   const { login } = useContext(AuthContext);
   const [isLogin, setIsLogin] = useState(true);
@@ -60,6 +62,8 @@ const AuthForm = () => {
   };
 
   return (
+    <>
+      <Header showSearch={false} />
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg">
         <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
@@ -137,6 +141,7 @@ const AuthForm = () => {
         </p>
       </div>
     </div>
+    </>
   );
 };
 
