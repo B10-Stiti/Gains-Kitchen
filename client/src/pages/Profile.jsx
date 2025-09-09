@@ -4,6 +4,8 @@ import ProfileEditForm from "../components/ProfileEditForm";
 import RecipeCard from "../components/RecipeCard";
 import { AuthContext } from "../context/AuthContext";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
+
 
 const Profile = () => {
   const { userId } = useContext(AuthContext);
@@ -66,7 +68,7 @@ const Profile = () => {
   return (
     <>
     <Header showSearch={false} />
-    <div className="max-w-7xl mx-auto mt-8 px-4">
+    <div className="max-w-7xl mx-auto mt-20 px-4">
       {isEditing ? (
         <ProfileEditForm
           userData={userData}
@@ -94,6 +96,7 @@ const Profile = () => {
         )}
       </div>
     </div>
+    <Footer/>
     </>
   );
 };

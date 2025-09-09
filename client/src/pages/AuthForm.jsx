@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 const AuthForm = () => {
   const { login } = useContext(AuthContext);
@@ -13,39 +14,29 @@ const AuthForm = () => {
   });
 
   const validateForm = (form, isLogin) => {
-    if (!form.email || !form.password) {
-      return "Email and password are required";
-    }
+    if (!form.email || !form.password) return "Email and password are required";
     if (!isLogin) {
-      if (!form.username || !form.confirm_password) {
-        return "All fields are required";
-      }
-      if (form.password !== form.confirm_password) {
-        return "Passwords do not match";
-      }
+      if (!form.username || !form.confirm_password) return "All fields are required";
+      if (form.password !== form.confirm_password) return "Passwords do not match";
     }
     return null;
   };
+
   const toggleForm = () => {
     setIsLogin(!isLogin);
-    setForm({
-      username: "",
-      email: "",
-      password: "",
-      confirm_password: "",
-    });
+    setForm({ username: "", email: "", password: "", confirm_password: "" });
   };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const error = validateForm(form, isLogin);
-    if (error) {
-      alert(error);
-      return;
-    }
+    if (error) return alert(error);
+
     const url = isLogin ? "/api/auth/login" : "/api/auth/register";
     const res = await fetch(url, {
       method: "POST",
@@ -53,94 +44,92 @@ const AuthForm = () => {
       body: JSON.stringify(form),
     });
     const rep = await res.json();
-    console.log(rep);
-    if (!res.ok) {
-      console.error("Error:", res.status, res.statusText);
-      return;
-    }
+    if (!res.ok) return console.error("Error:", res.status, res.statusText);
     login(rep.data.userId);
   };
 
   return (
     <>
       <Header showSearch={false} />
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg">
-        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
-          {isLogin ? "Login" : "Register"}
-        </h2>
-        <form className="space-y-4" onSubmit={handleSubmit}>
-          {!isLogin && (
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Username
-              </label>
-              <input
-                type="text"
-                name="username"
-                onChange={handleChange}
-                value={form.username}
-                className="w-full px-4 py-2 mt-1 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
-              />
-            </div>
-          )}
+      <div className="flex flex-col justify-between min-h-screen bg-gray-50 pt-32">
+        {/* Centered form */}
+        <div className="flex-grow flex items-center justify-center">
+          <div className="w-full max-w-lg bg-white p-10 rounded-3xl shadow-lg border border-gray-200">
+            <h2 className="text-3xl font-bold mb-8 text-center text-gray-900">
+              {isLogin ? "Login" : "Register"}
+            </h2>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Email
-            </label>
-            <input
-              type="email"
-              name="email"
-              onChange={handleChange}
-              value={form.email}
-              className="w-full px-4 py-2 mt-1 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Password
-            </label>
-            <input
-              type="password"
-              name="password"
-              onChange={handleChange}
-              value={form.password}
-              className="w-full px-4 py-2 mt-1 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
-            />
-          </div>
-          {!isLogin && (
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Confirm Password
-              </label>
+            <form className="space-y-6 text-gray-900" onSubmit={handleSubmit}>
+              {!isLogin && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-900">Username</label>
+                  <input
+                    type="text"
+                    name="username"
+                    onChange={handleChange}
+                    value={form.username}
+                    className="w-full px-4 py-3 mt-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  />
+                </div>
+              )}
+
+              <div>
+                <label className="block text-sm font-medium text-gray-900">Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  onChange={handleChange}
+                  value={form.email}
+                  className="w-full px-4 py-3 mt-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-900">Password</label>
+                <input
+                  type="password"
+                  name="password"
+                  onChange={handleChange}
+                  value={form.password}
+                  className="w-full px-4 py-3 mt-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                />
+              </div>
+
+              {!isLogin && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-900">Confirm Password</label>
+                  <input
+                    type="password"
+                    name="confirm_password"
+                    onChange={handleChange}
+                    value={form.confirm_password}
+                    className="w-full px-4 py-3 mt-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                  />
+                </div>
+              )}
+
               <input
-                type="password"
-                name="confirm_password"
-                onChange={handleChange}
-                value={form.confirm_password}
-                className="w-full px-4 py-2 mt-1 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
+                type="submit"
+                value={isLogin ? "Login" : "Register Now"}
+                className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-3 rounded-lg cursor-pointer transition"
               />
-            </div>
-          )}
-          <input
-            type="submit"
-            value={isLogin ? "Login" : "Register Now"}
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-xl cursor-pointer transition"
-          />
-        </form>
-        <p className="text-sm mt-4 text-center text-gray-600">
-          {isLogin ? "Don't have an account? " : "Already have an account? "}
-          <button
-            type="button"
-            onClick={toggleForm}
-            className="text-blue-500 hover:underline font-medium"
-          >
-            {isLogin ? "Register" : "login"}
-          </button>
-        </p>
+            </form>
+
+            <p className="text-sm mt-6 text-center text-gray-700">
+              {isLogin ? "Don't have an account? " : "Already have an account? "}
+              <button
+                type="button"
+                onClick={toggleForm}
+                className="text-green-500 hover:text-green-600 font-medium transition"
+              >
+                {isLogin ? "Register" : "Login"}
+              </button>
+            </p>
+          </div>
+        </div>
+
+        <Footer />
       </div>
-    </div>
     </>
   );
 };

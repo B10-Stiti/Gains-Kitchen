@@ -2,6 +2,8 @@ import React, { useEffect, useState, useContext } from "react";
 import RecipeCard from "../components/RecipeCard";
 import { AuthContext } from "../context/AuthContext";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
+
 
 const Favorites = () => {
   const [userFavorites, setUserFavorites] = useState([]);
@@ -37,7 +39,7 @@ const Favorites = () => {
   return (
     <>
     <Header showSearch={false} />
-    <section className="bg-gray-300 text-gray-900 min-h-[calc(100vh-160px)] px-4 sm:px-8 py-8">
+    <section className="text-gray-900 min-h-[calc(100vh-160px)] px-4 sm:px-8 py-8 mt-16">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-3xl font-bold mb-6">
           My <span className="text-red-500">Favorites</span>
@@ -58,6 +60,7 @@ const Favorites = () => {
         </div>
       </div>
     </section>
+    <Footer/>
     </>
   );
 };
