@@ -5,16 +5,16 @@ const ProfileEditForm = ({ userData, setUserData, handleImageChange, setIsEditin
   const fitnessGoals = ["Bulking", "Cutting", "Maintenance", "Muscle Gain"];
 
   const handleSave = async () => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    const url = "/api/user/" + user._id;
+    const userId = localStorage.getItem("userId");
+    console.log(userId)
+    const url = "/api/user/" + userId;
     const res = await fetch(url, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(userData.user),
     });
     if (res.ok) setIsEditing(false);
-  };
-
+  }; 
   return (
     <form className="flex flex-col gap-8 bg-white p-6 rounded-2xl shadow-lg mb-8">
       {/* Profile Image */}

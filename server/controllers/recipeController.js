@@ -55,21 +55,20 @@ export const createRecipe = async (req, res) => {
 
 export const getRecipes = async (req, res) => {
   try {
-    const recipes = await Recipe.find();
+    const { search, type, goal } = req.query;
 
-    if (recipes) {
-      return res.status(200).json({
-        code: "API.Recipes.success",
-        message: "Fetched recipes successfully",
-        data: recipes,
-      });
-    } else {
-      return res.status(404).json({
-        code: "API.Recipes.empty",
-        message: "No recipes found",
-        data: [],
-      });
-    }
+    const filter = {};
+    if (search) filter.title = { $regex: search, $options: "i" };
+    if (type) filter.recipeType = type;
+    if (goal) filter.fitnessGoal = goal;
+
+    const recipes = await Recipe.find(filter);
+
+    return res.status(200).json({
+      code: recipes.length > 0 ? "API.Recipes.success" : "API.Recipes.empty",
+      message: recipes.length > 0 ? "Fetched recipes successfully" : "No recipes found",
+      data: recipes,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({

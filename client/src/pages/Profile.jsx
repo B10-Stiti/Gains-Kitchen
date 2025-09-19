@@ -21,7 +21,6 @@ const Profile = () => {
     recipeCount: 0,
     userRecipes: [],
   });
-
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -50,10 +49,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchData = async () => {
       const url = "/api/user/" + userId;
-      const res = await fetch(url, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      });
+      const res = await fetch(url)
       const rep = await res.json();
       console.log(rep);
       if (!res.ok) {
