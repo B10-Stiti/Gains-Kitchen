@@ -53,8 +53,7 @@ export const updateUser = async (req, res) => {
 // Favorites
 export const getUserFavorites = async (req, res) => {
   try {
-    // find user and populate the favorites array with actual Recipe documents
-    const user = await User.findById(req.params.id).populate("favorites");
+    const user = await User.findById(req.params.id);
     if (!user) {
       return res.status(404).json({ 
         code : "API.user.failed",

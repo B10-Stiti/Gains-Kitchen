@@ -30,34 +30,34 @@ const Home = () => {
     };
     fetchData();
   }, [filters]);
+
   const onSearch = (searchData) => {
     setFilters(searchData);
   };
   return (
-<section className="bg-gray-50 min-h-screen pt-28 pb-12 flex flex-col">
-  <Header showSearch={true} onSearch={onSearch} />
+    <section className="bg-gray-50 min-h-screen pt-28 pb-12 flex flex-col">
+      <Header showSearch={true} onSearch={onSearch} />
 
-  <div className="max-w-3xl mx-auto w-full flex-1 flex flex-col space-y-6 px-4">
-    {(!recipes || recipes.length === 0) ? (
-      <div className="flex flex-1 items-center justify-center">
-        <p className="text-gray-500 text-3xl md:text-3xl font-semibold text-center">
-          No recipes found.
-        </p>
+      <div className="max-w-3xl mx-auto w-full flex-1 flex flex-col space-y-6 px-4">
+        {!recipes || recipes.length === 0 ? (
+          <div className="flex flex-1 items-center justify-center">
+            <p className="text-gray-500 text-3xl md:text-3xl font-semibold text-center">
+              No recipes found.
+            </p>
+          </div>
+        ) : (
+          recipes.map((recipe) => (
+            <RecipeCard
+              key={recipe._id}
+              recipe={recipe}
+              className="w-full bg-white rounded-lg shadow-md"
+            />
+          ))
+        )}
       </div>
-    ) : (
-      recipes.map((recipe) => (
-        <RecipeCard
-          key={recipe._id}
-          recipe={recipe}
-          className="w-full bg-white rounded-lg shadow-md"
-        />
-      ))
-    )}
-  </div>
 
-  <Footer />
-</section>
-
+      <Footer />
+    </section>
   );
 };
 

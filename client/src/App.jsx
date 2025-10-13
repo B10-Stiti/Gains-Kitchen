@@ -5,10 +5,12 @@ import AuthForm from "./pages/AuthForm";
 import Profile from "./pages/Profile";
 import Favorites from "./pages/Favorites";
 import { AuthProvider } from "./context/AuthContext";
+import { FavoritesProvider } from "./context/FavoritesContext";
 import Home from "./pages/Home";
 function App() {
   return (
     <AuthProvider>
+      <FavoritesProvider>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/auth" element={<AuthForm />} />
@@ -16,6 +18,7 @@ function App() {
         <Route path="/share-recipe" element={<ShareRecipe />} />
         <Route path="/favorites" element={<Favorites />} />
       </Routes>
+      </FavoritesProvider>
     </AuthProvider>
   );
 }

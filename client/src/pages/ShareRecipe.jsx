@@ -2,9 +2,11 @@ import React, { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { useNavigate } from "react-router-dom";
 
 const ShareRecipe = () => {
   const { userId } = useContext(AuthContext);
+  const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [imageUrl, setImageUrl] = useState("");
@@ -72,11 +74,7 @@ const ShareRecipe = () => {
       !fitnessGoal.trim() ||
       !instructions.trim()
     ) {
-      alert("Please fill in all fields before submitting.");
-      return;
-    }
-    if (!userId) {
-      alert("Please log in to share a recipe.");
+      alert("Please fill in all fields");
       return;
     }
     const recipeData = {
@@ -111,6 +109,7 @@ const ShareRecipe = () => {
     setRecipeType("");
     setFitnessGoal("");
     setInstructions("");
+    navigate("/profile");
   };
 
   return (

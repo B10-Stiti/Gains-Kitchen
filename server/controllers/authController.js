@@ -7,14 +7,14 @@ export const registerUser = async (req, res) => {
     if (password !== confirm_password) {
       return res.status(400).json({
         code: "API.signup.Failed",
-        message: "Passwords do not match",
+        message: "Passwords do not match !",
       });
     }
     const check_user = await User.findOne({ email: email });
     if (check_user) {
       return res.status(400).json({
         code: "API.signup.Failed",
-        message: "User Already Exist",
+        message: "Email already used !",
       });
     }
     const hashedPassword = await bcrypt.hash(password, 10);

@@ -1,11 +1,14 @@
 import React, { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 const AuthForm = () => {
   const { login } = useContext(AuthContext);
+  const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
+  const [error, setError] = useState("");
   const [form, setForm] = useState({
     username: "",
     email: "",
@@ -16,8 +19,10 @@ const AuthForm = () => {
   const validateForm = (form, isLogin) => {
     if (!form.email || !form.password) return "Email and password are required";
     if (!isLogin) {
-      if (!form.username || !form.confirm_password) return "All fields are required";
-      if (form.password !== form.confirm_password) return "Passwords do not match";
+      if (!form.username || !form.confirm_password)
+        return "All fields are required";
+      if (form.password !== form.confirm_password)
+        return "Passwords do not match";
     }
     return null;
   };
@@ -25,6 +30,7 @@ const AuthForm = () => {
   const toggleForm = () => {
     setIsLogin(!isLogin);
     setForm({ username: "", email: "", password: "", confirm_password: "" });
+    setError("");
   };
 
   const handleChange = (e) => {
@@ -34,18 +40,29 @@ const AuthForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const error = validateForm(form, isLogin);
-    if (error) return alert(error);
-
-    const url = isLogin ? "/api/auth/login" : "/api/auth/register";
-    const res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
-    const rep = await res.json();
-    if (!res.ok) return console.error("Error:", res.status, res.statusText);
-    login(rep.data.userId);
+    const validationError = validateForm(form, isLogin);
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+    try {
+      const url = isLogin ? "/api/auth/login" : "/api/auth/register";
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const rep = await res.json();
+      if (!res.ok) {
+        setError(rep.message || "Something went wrong");
+        return;
+      }
+      setError("");
+      login(rep.data.userId);
+      navigate("/");
+    } catch (err) {
+      setError("Server error, please try again.");
+    }
   };
 
   return (
@@ -58,11 +75,17 @@ const AuthForm = () => {
             <h2 className="text-3xl font-bold mb-8 text-center text-gray-900">
               {isLogin ? "Login" : "Register"}
             </h2>
-
+            {error && (
+              <div className="mb-4 rounded-lg bg-red-100 border border-red-400 text-red-700 px-4 py-3">
+                {error}
+              </div>
+            )}
             <form className="space-y-6 text-gray-900" onSubmit={handleSubmit}>
               {!isLogin && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-900">Username</label>
+                  <label className="block text-sm font-medium text-gray-900">
+                    Username
+                  </label>
                   <input
                     type="text"
                     name="username"
@@ -74,7 +97,9 @@ const AuthForm = () => {
               )}
 
               <div>
-                <label className="block text-sm font-medium text-gray-900">Email</label>
+                <label className="block text-sm font-medium text-gray-900">
+                  Email
+                </label>
                 <input
                   type="email"
                   name="email"
@@ -85,7 +110,9 @@ const AuthForm = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-900">Password</label>
+                <label className="block text-sm font-medium text-gray-900">
+                  Password
+                </label>
                 <input
                   type="password"
                   name="password"
@@ -97,7 +124,9 @@ const AuthForm = () => {
 
               {!isLogin && (
                 <div>
-                  <label className="block text-sm font-medium text-gray-900">Confirm Password</label>
+                  <label className="block text-sm font-medium text-gray-900">
+                    Confirm Password
+                  </label>
                   <input
                     type="password"
                     name="confirm_password"
@@ -116,7 +145,9 @@ const AuthForm = () => {
             </form>
 
             <p className="text-sm mt-6 text-center text-gray-700">
-              {isLogin ? "Don't have an account? " : "Already have an account? "}
+              {isLogin
+                ? "Don't have an account? "
+                : "Already have an account? "}
               <button
                 type="button"
                 onClick={toggleForm}

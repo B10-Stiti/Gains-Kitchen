@@ -1,33 +1,15 @@
-import React, { useState, useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
+import React, { useState } from "react";
+import { useFavorites } from "../context/FavoritesContext";
 
-const RecipeCard = ({
-  recipe,
-  isFavorite: initialFavorite = false,
-  onToggleFavorite,
-}) => {
-  const { userId } = useContext(AuthContext);
+const RecipeCard = ({recipe}) => {
+  const { userFavorites, addFavorite, removeFavorite } = useFavorites();
   const [showFull, setShowFull] = useState(false);
-  const [isFavorite, setIsFavorite] = useState(initialFavorite);
+  const isFavorite = userFavorites.includes(recipe._id);
 
-  const handleFavorite = async () => {
-    console.log(userId);
-    const url = "/api/user/" + userId + "/favorites/" + recipe._id;
-    const res = await fetch(url, {
-      method: isFavorite ? "DELETE" : "POST",
-      headers: { "Content-Type": "application/json" },
-    });
-    const rep = await res.json();
-    console.log(rep.data);
-    if (!res.ok) {
-      console.error("Error:", res.status, res.statusText);
-      return;
-    }
-    if (isFavorite && onToggleFavorite) {
-      onToggleFavorite(recipe._id);
-    }
-    setIsFavorite(!isFavorite);
-  };
+const handleFavorite = () => {
+  if (isFavorite) removeFavorite(recipe._id);
+  else addFavorite(recipe._id);
+};
 
   return (
     <article className="bg-gray-50 rounded-2xl shadow-md overflow-hidden w-full max-w-3xl mx-auto my-6 flex flex-col md:flex-row">
