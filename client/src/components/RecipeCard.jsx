@@ -52,17 +52,17 @@ const handleFavorite = () => {
         </p>
 
         <p className="text-gray-700">
-          {showFull
+          {showFull || recipe.instructions.length <= 100
             ? recipe.instructions
             : recipe.instructions.slice(0, 100) + "..."}
         </p>
 
-        <button
+        {recipe.instructions.length > 100 && (<button
           onClick={() => setShowFull(!showFull)}
           className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-full transition"
         >
           {showFull ? "Read less" : "Read more"}
-        </button>
+        </button>)}
       </div>
     </article>
   );

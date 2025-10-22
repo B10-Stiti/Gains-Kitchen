@@ -35,7 +35,7 @@ const Home = () => {
     setFilters(searchData);
   };
   return (
-    <section className="bg-gray-50 min-h-screen pt-28 pb-12 flex flex-col">
+    <section className="bg-gray-50 min-h-screen pt-28 flex flex-col">
       <Header showSearch={true} onSearch={onSearch} />
 
       <div className="max-w-3xl mx-auto w-full flex-1 flex flex-col space-y-6 px-4">

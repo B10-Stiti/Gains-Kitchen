@@ -6,7 +6,6 @@ import { AuthContext } from "../context/AuthContext";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
-
 const Profile = () => {
   const { userId } = useContext(AuthContext);
   const [isEditing, setIsEditing] = useState(false);
@@ -49,7 +48,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchData = async () => {
       const url = "/api/user/" + userId;
-      const res = await fetch(url)
+      const res = await fetch(url);
       const rep = await res.json();
       console.log(rep);
       if (!res.ok) {
@@ -62,38 +61,40 @@ const Profile = () => {
   }, []);
 
   return (
-    <>
-    <Header showSearch={false} />
-    <div className="max-w-7xl mx-auto mt-20 px-4">
-      {isEditing ? (
-        <ProfileEditForm
-          userData={userData}
-          setUserData={setUserData}
-          handleImageChange={handleImageChange}
-          setIsEditing={setIsEditing}
-        />
-      ) : (
-        <ProfileHeader userData={userData} setIsEditing={setIsEditing} />
-      )}
+    <section className="bg-gray-50 min-h-screen flex flex-col">
+      <Header showSearch={false} />
 
-      {/* My Recipes Section */}
-      <div className="mt-8">
-        <h2 className="text-2xl font-bold mb-4 border-b-2 border-green-500 pb-2">
-          My Recipes
-        </h2>
-        {userData.userRecipes.length === 0 ? (
-          <p className="text-gray-500">No recipes shared yet.</p>
+      <div className="flex-1 max-w-7xl mx-auto mt-20 px-4 w-full">
+        {isEditing ? (
+          <ProfileEditForm
+            userData={userData}
+            setUserData={setUserData}
+            handleImageChange={handleImageChange}
+            setIsEditing={setIsEditing}
+          />
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {userData.userRecipes.map((recipe) => (
-              <RecipeCard key={recipe._id} recipe={recipe} />
-            ))}
-          </div>
+          <ProfileHeader userData={userData} setIsEditing={setIsEditing} />
         )}
+
+        {/* My Recipes Section */}
+        <div className="mt-8">
+          <h2 className="text-2xl font-bold mb-4 border-b-2 border-green-500 pb-2">
+            My Recipes
+          </h2>
+          {userData.userRecipes.length === 0 ? (
+            <p className="text-gray-500">No recipes shared yet.</p>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {userData.userRecipes.map((recipe) => (
+                <RecipeCard key={recipe._id} recipe={recipe} />
+              ))}
+            </div>
+          )}
+        </div>
       </div>
-    </div>
-    <Footer/>
-    </>
+
+      <Footer />
+    </section>
   );
 };
 
