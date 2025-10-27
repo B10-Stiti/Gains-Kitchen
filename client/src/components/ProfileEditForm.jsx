@@ -1,6 +1,5 @@
-import React from "react";
 import { UserContext } from "../context/UserContext";
-
+import { useContext } from "react";
 const ProfileEditForm = ({ userData, setUserData, handleImageChange, setIsEditing }) => {
   const { profilePicture, username, bio, fitnessGoal } = userData.user;
   const fitnessGoals = ["Bulking", "Cutting", "Maintenance", "Muscle Gain"];
