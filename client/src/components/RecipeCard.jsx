@@ -12,7 +12,7 @@ const handleFavorite = () => {
 };
 
   return (
-    <article className="bg-gray-50 rounded-2xl shadow-md overflow-hidden w-full max-w-3xl mx-auto my-6 flex flex-col md:flex-row">
+    <article className="bg-gray-50 rounded-2xl shadow-md overflow-hidden w-full max-w-5xl mx-auto my-6 flex flex-col md:flex-row">
       {/* Image */}
       <div className="relative w-full md:w-1/2">
         <img

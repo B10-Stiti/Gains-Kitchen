@@ -38,7 +38,7 @@ const Home = () => {
     <section className="bg-gray-50 min-h-screen pt-28 flex flex-col">
       <Header showSearch={true} onSearch={onSearch} />
 
-      <div className="max-w-3xl mx-auto w-full flex-1 flex flex-col space-y-6 px-4">
+      <div className="max-w-5xl mx-auto w-full flex-1 flex flex-col space-y-6 px-4">
         {!recipes || recipes.length === 0 ? (
           <div className="flex flex-1 items-center justify-center">
             <p className="text-gray-500 text-3xl md:text-3xl font-semibold text-center">

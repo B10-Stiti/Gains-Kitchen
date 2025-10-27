@@ -2,12 +2,12 @@ import React, { useEffect, useState, useContext } from "react";
 import ProfileHeader from "../components/ProfileHeader";
 import ProfileEditForm from "../components/ProfileEditForm";
 import RecipeCard from "../components/RecipeCard";
-import { AuthContext } from "../context/AuthContext";
+import { UserContext } from "../context/UserContext";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 const Profile = () => {
-  const { userId } = useContext(AuthContext);
+  const { userId } = useContext(UserContext);
   const [isEditing, setIsEditing] = useState(false);
   const [userData, setUserData] = useState({
     user: {
@@ -31,6 +31,7 @@ const Profile = () => {
       const res = await fetch("/api/upload", {
         method: "POST",
         body: formData,
+        credentials: "include",
       });
 
       if (!res.ok) throw new Error("Upload failed");
@@ -48,7 +49,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchData = async () => {
       const url = "/api/user/" + userId;
-      const res = await fetch(url);
+      const res = await fetch(url , {credentials: "include"});
       const rep = await res.json();
       console.log(rep);
       if (!res.ok) {

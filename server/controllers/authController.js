@@ -1,5 +1,6 @@
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
+import createAndSetToken from "../utils/createAndSetToken.js";
 
 export const registerUser = async (req, res) => {
   try {
@@ -24,6 +25,7 @@ export const registerUser = async (req, res) => {
       password: hashedPassword,
     });
     if (user) {
+      createAndSetToken(user._id, res);
       return res.status(201).json({
         code: "API.signup.success",
         message: "user added successfully",
@@ -51,6 +53,7 @@ export const loginUser = async (req, res) => {
       });
     }
     if (await bcrypt.compare(password, check_user.password)) {
+      createAndSetToken(check_user._id, res);
       res.json({
         code: "API.login.success",
         message: "user logged successFully",
@@ -67,4 +70,31 @@ export const loginUser = async (req, res) => {
   } catch {
     res.status(500).json({ message: "Error during login" });
   }
+};
+
+export const getCurrentUserId = (req, res) => {
+  try {
+    if (!req.userId) return res.status(401).json({ message: "Not authorized" });
+      res.json({
+        code: "API.me.success",
+        message: "user is logged in",
+        userId: req.userId,
+      });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const logoutUser = (req, res) => {
+  res.cookie("jwt", "", {
+    httpOnly: true,
+    secure: false,
+    sameSite: "strict",
+    expires: new Date(0),
+  });
+  return res.json({
+    code: "API.logout.success",
+    message: "User logged out successfully",
+  });
 };

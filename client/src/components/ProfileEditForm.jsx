@@ -1,17 +1,18 @@
 import React from "react";
+import { UserContext } from "../context/UserContext";
 
 const ProfileEditForm = ({ userData, setUserData, handleImageChange, setIsEditing }) => {
   const { profilePicture, username, bio, fitnessGoal } = userData.user;
   const fitnessGoals = ["Bulking", "Cutting", "Maintenance", "Muscle Gain"];
+  const { userId } = useContext(UserContext);
 
   const handleSave = async () => {
-    const userId = localStorage.getItem("userId");
-    console.log(userId)
     const url = "/api/user/" + userId;
     const res = await fetch(url, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(userData.user),
+      credentials: "include",
     });
     if (res.ok) setIsEditing(false);
   }; 

@@ -1,11 +1,12 @@
 import React, { useState, useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
 
 const ShareRecipe = () => {
-  const { userId } = useContext(AuthContext);
+  const { userId } = useContext(UserContext);
+  
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -93,6 +94,7 @@ const ShareRecipe = () => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(recipeData),
+      credentials: "include",
     });
     const rep = await res.json();
     console.log(rep);

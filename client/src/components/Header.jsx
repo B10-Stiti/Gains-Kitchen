@@ -1,8 +1,11 @@
 import React, { useContext, useState } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { UserContext } from "../context/UserContext";
+import { useNavigate } from "react-router-dom";
+
 
 const Header = ({ onSearch, showSearch }) => {
-  const { userId, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const { userId, setUserId } = useContext(UserContext);
   const [SearchData, setSearchData] = useState({
     searchText: "",
     recipeType: "",
@@ -24,6 +27,22 @@ const Header = ({ onSearch, showSearch }) => {
     const { name, value } = e.target;
     setSearchData((prev) => ({ ...prev, [name]: value }));
   };
+
+  const handleLogout = async () => {
+  try {
+    const res = await fetch("/api/auth/logout", {
+      method: "POST",
+      credentials: "include",
+    });
+    const rep = await res.json();
+    if (res.ok) {
+      setUserId(null);
+      navigate("/auth");
+    }
+  } catch (err) {
+    console.error("Logout failed:", err);
+  }
+};
 
   return (
 <header className="fixed top-0 w-full z-50 bg-white shadow-md border-b-2 border-red-500">
@@ -64,7 +83,7 @@ const Header = ({ onSearch, showSearch }) => {
 
       {userId ? (
         <button
-          onClick={logout}
+          onClick={handleLogout}
           className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg text-white transition-colors"
         >
           Logout

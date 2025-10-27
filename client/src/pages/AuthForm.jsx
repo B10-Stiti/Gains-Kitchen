@@ -1,12 +1,12 @@
-import React, { useContext, useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { UserContext } from "../context/UserContext";
 
 const AuthForm = () => {
-  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
+  const { setUserId } = useContext(UserContext);
   const [isLogin, setIsLogin] = useState(true);
   const [error, setError] = useState("");
   const [form, setForm] = useState({
@@ -51,14 +51,15 @@ const AuthForm = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
+        credentials: "include",
       });
-      const rep = await res.json();
       if (!res.ok) {
         setError(rep.message || "Something went wrong");
         return;
       }
+      const rep = await res.json();
+      setUserId(rep.data.userId)
       setError("");
-      login(rep.data.userId);
       navigate("/");
     } catch (err) {
       setError("Server error, please try again.");
