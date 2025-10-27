@@ -44,10 +44,11 @@ Users can create accounts, post their gym recipes with images, explore recipes f
 
 ---
 
-## 📹 Demo  
-<a href="demo.mp4">
+## 📹 Demo
+<a href="https://drive.google.com/file/d/1SB9-NPBrWLUgj3lQ7Pml-BWrpnQQqPYv/view?usp=sharing">
   <img src="https://github.com/user-attachments/assets/3c93a240-4114-4f9a-81c6-26093df95e17" width="500" />
 </a>
+
 
 
 ---
